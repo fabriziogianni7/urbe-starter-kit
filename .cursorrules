@@ -1,0 +1,338 @@
+# Web3 Starter Kit - Cursor AI Context Rules
+
+## Project Overview
+This is a comprehensive Web3 starter kit for students learning blockchain development. The project uses:
+- **React** for frontend development
+- **Wagmi** for Ethereum interactions
+- **Foundry** for smart contract development
+- **Civic** for Web3 authentication
+- **TypeScript** for type safety
+
+## Technology Stack Context
+
+### Frontend (React + TypeScript)
+- Use functional components with hooks
+- Implement proper TypeScript types for all Web3 interactions
+- Use React Query for data fetching and caching
+- Implement proper error boundaries for Web3 errors
+- Use React Router for navigation
+- Follow React best practices and hooks patterns
+
+### Wagmi (Web3 React Hooks)
+- Use `useAccount()` for wallet connection state
+- Use `useContractRead()` for reading smart contract data
+- Use `useContractWrite()` for writing to smart contracts
+- Use `useBalance()` for token balances
+- Use `useNetwork()` for network switching
+- Always handle loading and error states
+- Implement proper transaction status tracking
+
+### Foundry (Smart Contracts)
+- Use Solidity 0.8.19+ with latest features
+- Implement proper access control with OpenZeppelin
+- Use events for important state changes
+- Implement proper error handling with custom errors
+- Follow security best practices (reentrancy, overflow, etc.)
+- Use NatSpec documentation for all public functions
+- Implement proper testing with Foundry's testing framework
+
+### Civic Authentication
+- Civic provides Web3 authentication with multiple login options
+- Supports SSO (Google, Apple, X, Facebook, Discord, GitHub)
+- Supports email authentication
+- Provides embedded wallet capabilities
+- Integrates with major chains out of the box
+- Use Civic's React SDK: `@civic/auth-web3`
+
+## Code Style and Patterns
+
+### React Components
+```typescript
+// Example component structure
+interface ComponentProps {
+  // Define clear prop types
+}
+
+const Component: React.FC<ComponentProps> = ({ prop1, prop2 }) => {
+  // Use custom hooks for Web3 logic
+  const { data, isLoading, error } = useWeb3Hook();
+  
+  // Handle loading states
+  if (isLoading) return <LoadingSpinner />;
+  
+  // Handle error states
+  if (error) return <ErrorMessage error={error} />;
+  
+  return (
+    <div>
+      {/* Component JSX */}
+    </div>
+  );
+};
+```
+
+### Wagmi Hooks Usage
+```typescript
+// Example Wagmi hook usage
+const { data: balance, isLoading } = useBalance({
+  address: account?.address,
+  watch: true,
+});
+
+const { write, isLoading: isWriting } = useContractWrite({
+  address: contractAddress,
+  abi: contractABI,
+  functionName: 'functionName',
+});
+```
+
+### Smart Contract Patterns
+```solidity
+// Example smart contract structure
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract ExampleContract is Ownable, ReentrancyGuard {
+    // Events
+    event ValueUpdated(uint256 newValue);
+    
+    // State variables
+    uint256 private _value;
+    
+    // Custom errors
+    error InvalidValue();
+    
+    // Functions
+    function setValue(uint256 newValue) external onlyOwner {
+        if (newValue == 0) revert InvalidValue();
+        _value = newValue;
+        emit ValueUpdated(newValue);
+    }
+    
+    function getValue() external view returns (uint256) {
+        return _value;
+    }
+}
+```
+
+## Civic Integration Guidelines
+
+### Civic Setup
+1. Install Civic SDK: `npm install @civic/auth-web3`
+2. Configure Civic client in environment variables
+3. Set up redirect URIs in Civic dashboard
+4. Implement authentication flow with Civic hooks
+
+### Civic Authentication Flow
+```typescript
+// Example Civic integration
+import { CivicAuthProvider, useUser } from '@civic/auth-web3/react';
+
+// Provider setup
+<CivicAuthProvider clientId={process.env.VITE_CIVIC_CLIENT_ID}>
+  {/* Your app components */}
+</CivicAuthProvider>
+
+// Using the hook
+const { user, authStatus, signIn, signOut, isLoading, error } = useUser();
+
+// Handle authentication
+const handleSignIn = () => {
+  signIn();
+};
+
+// Check authentication status
+const isAuthenticated = authStatus === 'authenticated';
+```
+
+### Civic UserButton Component
+```typescript
+import { UserButton } from '@civic/auth-web3/react';
+
+// Basic usage
+<UserButton />
+
+// With custom styling
+<UserButton 
+  className="civic-user-button"
+  dropdownButtonClassName="civic-dropdown-button"
+  style={{ minWidth: "20rem" }}
+  dropdownButtonStyle={{ backgroundColor: "red" }}
+/>
+```
+
+### Civic User Object Structure
+```typescript
+interface CivicUser {
+  id: string;
+  email?: string;
+  name?: string;
+  picture?: string;
+  given_name?: string;
+  family_name?: string;
+  updated_at?: Date;
+}
+```
+
+### Civic Authentication Status
+```typescript
+enum AuthStatus {
+  AUTHENTICATED = "authenticated",
+  UNAUTHENTICATED = "unauthenticated",
+  AUTHENTICATING = "authenticating",
+  ERROR = "error",
+  SIGNING_OUT = "signing_out",
+}
+```
+
+## File Structure Conventions
+
+### Frontend Structure
+```
+frontend/src/
+├── components/          # Reusable UI components
+│   ├── ui/            # Basic UI components
+│   ├── web3/          # Web3-specific components
+│   └── civic/         # Civic authentication components
+├── hooks/              # Custom React hooks
+│   ├── web3/          # Web3-related hooks
+│   └── civic/         # Civic-related hooks
+├── pages/              # Page components
+├── utils/              # Utility functions
+│   ├── web3/          # Web3 utilities
+│   └── civic/         # Civic utilities
+├── types/              # TypeScript type definitions
+├── constants/          # Application constants
+└── wagmi/              # Wagmi configuration
+```
+
+### Smart Contract Structure
+```
+contracts/
+├── src/                # Smart contracts
+│   ├── interfaces/     # Contract interfaces
+│   ├── libraries/      # Shared libraries
+│   └── upgrades/       # Upgradeable contracts
+├── test/               # Contract tests
+├── script/             # Deployment scripts
+└── foundry.toml        # Foundry configuration
+```
+
+## Best Practices
+
+### Security
+- Always validate user inputs
+- Use proper access control mechanisms
+- Implement reentrancy guards where needed
+- Use safe math operations (Solidity 0.8+ handles this)
+- Validate contract addresses before interactions
+- Handle failed transactions gracefully
+
+### Error Handling
+- Implement comprehensive error handling for Web3 operations
+- Provide user-friendly error messages
+- Log errors for debugging
+- Handle network errors and timeouts
+- Implement retry mechanisms for failed transactions
+
+### Performance
+- Optimize smart contract gas usage
+- Implement proper caching strategies
+- Use React.memo for expensive components
+- Implement proper loading states
+- Optimize bundle size
+
+### Testing
+- Write comprehensive unit tests for smart contracts
+- Test all possible scenarios including edge cases
+- Implement integration tests for Web3 interactions
+- Test error conditions and edge cases
+- Use proper mocking for external dependencies
+
+## Common Patterns
+
+### Wallet Connection
+```typescript
+const { address, isConnected, isConnecting } = useAccount();
+const { connect, connectors } = useConnect();
+
+const handleConnect = () => {
+  if (connectors[0]) {
+    connect({ connector: connectors[0] });
+  }
+};
+```
+
+### Contract Interaction
+```typescript
+const { data, isLoading, error } = useContractRead({
+  address: contractAddress,
+  abi: contractABI,
+  functionName: 'functionName',
+  args: [arg1, arg2],
+});
+
+const { write, isLoading: isWriting } = useContractWrite({
+  address: contractAddress,
+  abi: contractABI,
+  functionName: 'functionName',
+});
+```
+
+### Transaction Handling
+```typescript
+const { write, isLoading, isSuccess, isError, error } = useContractWrite({
+  address: contractAddress,
+  abi: contractABI,
+  functionName: 'functionName',
+});
+
+const handleTransaction = () => {
+  write({
+    args: [arg1, arg2],
+    onSuccess: (data) => {
+      console.log('Transaction successful:', data);
+    },
+    onError: (error) => {
+      console.error('Transaction failed:', error);
+    },
+  });
+};
+```
+
+## Environment Variables
+Always use environment variables for:
+- RPC URLs
+- Contract addresses
+- API keys
+- Civic client IDs
+- Private keys (for deployment only)
+
+## Documentation
+- Document all public functions with NatSpec
+- Include examples in README
+- Document deployment procedures
+- Include troubleshooting guides
+- Document security considerations
+
+## Code Review Checklist
+- [ ] TypeScript types are properly defined
+- [ ] Error handling is implemented
+- [ ] Loading states are handled
+- [ ] Security best practices are followed
+- [ ] Tests are written and passing
+- [ ] Documentation is updated
+- [ ] Gas optimization is considered
+- [ ] User experience is considered
+
+## Resources
+- [Wagmi Documentation](https://wagmi.sh/)
+- [Foundry Book](https://book.getfoundry.sh/)
+- [Civic Documentation](https://docs.civic.com/)
+- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
+- [Ethereum Development](https://ethereum.org/developers/)
+
+Remember: Always prioritize security, user experience, and code maintainability in Web3 development. 

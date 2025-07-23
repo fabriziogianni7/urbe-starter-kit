@@ -134,27 +134,44 @@ starter-kit/
 
 ### Environment Variables
 
+The project uses two separate environment files:
+
+#### Frontend Environment (Vite)
+Create a `.env` file in the `frontend/` directory:
+
+```bash
+cp frontend/.env.example frontend/.env
+```
+
+This file contains all Vite-specific variables (prefixed with `VITE_`):
+- Civic authentication settings
+- Blockchain configuration
+- Contract addresses
+- UI/UX settings
+- Feature flags
+
+#### Root Environment (Deployment)
 Create a `.env` file in the root directory:
 
-```env
-# Civic Authentication
-VITE_CIVIC_CLIENT_ID=your_civic_client_id
-VITE_CIVIC_REDIRECT_URI=http://localhost:3000/auth/callback
-
-# Blockchain Configuration
-VITE_CHAIN_ID=11155111  # Sepolia testnet
-VITE_RPC_URL=https://sepolia.infura.io/v3/your_project_id
-
-# Contract Addresses (will be populated after deployment)
-VITE_CONTRACT_ADDRESS=
+```bash
+cp env.example .env
 ```
+
+This file contains deployment and contract-related variables:
+- Private keys for deployment
+- API keys for verification
+- Network configuration
+- Foundry settings
+
+**Note**: Frontend variables must be in `frontend/.env` and prefixed with `VITE_` to be accessible by the Vite application.
 
 ### Civic Setup
 
 1. Go to [Civic Dashboard](https://auth.civic.com)
 2. Create a new application
 3. Add your redirect URI: `http://localhost:3000/auth/callback`
-4. Copy your Client ID to `.env`
+4. **Enable Embedded Wallet**: In your Civic dashboard, go to Settings → Embedded Wallet and enable it for your users
+5. Copy your Client ID to `frontend/.env`
 
 ## 📚 Learning Path
 

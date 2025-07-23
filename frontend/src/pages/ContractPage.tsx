@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useContractRead, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useContractRead, useContractWrite } from 'wagmi'
 import { Wallet, Send, Database, RefreshCw } from 'lucide-react'
 import { useWeb3 } from '../components/web3/Web3Provider'
 
@@ -26,31 +26,26 @@ export const ContractPage: React.FC = () => {
   const [value, setValue] = useState('')
   
   // Example contract address (replace with your deployed contract)
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000'
+  const contractAddress = (import.meta as any).env?.VITE_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000'
 
   // Read contract value
   const { data: storedValue, isLoading: isReading, refetch } = useContractRead({
     address: contractAddress as `0x${string}`,
     abi: contractABI,
     functionName: 'retrieve',
-    enabled: isConnected && contractAddress !== '0x0000000000000000000000000000000000000000',
   })
 
   // Write to contract
-  const { write, isLoading: isWriting } = useContractWrite({
-    address: contractAddress as `0x${string}`,
-    abi: contractABI,
-    functionName: 'store',
-  })
-
-  // Wait for transaction
-  const { isLoading: isWaiting } = useWaitForTransaction({
-    hash: undefined, // Add transaction hash when available
-  })
+  const { writeContract, isPending: isWriting } = useContractWrite()
 
   const handleStore = () => {
-    if (value && write) {
-      write({ args: [BigInt(value)] })
+    if (value && contractAddress !== '0x0000000000000000000000000000000000000000') {
+      writeContract({
+        address: contractAddress as `0x${string}`,
+        abi: contractABI,
+        functionName: 'store',
+        args: [BigInt(value)],
+      })
     }
   }
 
@@ -129,24 +124,24 @@ export const ContractPage: React.FC = () => {
           </div>
           <button
             onClick={handleStore}
-            disabled={!value || isWriting || isWaiting}
+            disabled={!value || isWriting}
             className="btn-primary flex items-center space-x-2"
           >
             <Send className="h-4 w-4" />
-            <span>{isWriting || isWaiting ? 'Processing...' : 'Store Value'}</span>
+            <span>{isWriting ? 'Processing...' : 'Store Value'}</span>
           </button>
         </div>
       </div>
 
       {/* Transaction Status */}
-      {(isWriting || isWaiting) && (
+      {isWriting && (
         <div className="card bg-blue-50 border-blue-200">
           <div className="flex items-center space-x-3">
             <RefreshCw className="h-5 w-5 text-blue-600 animate-spin" />
             <div>
               <h3 className="font-semibold text-blue-900">Transaction in Progress</h3>
               <p className="text-sm text-blue-700">
-                {isWriting ? 'Waiting for wallet confirmation...' : 'Transaction being processed...'}
+                Waiting for wallet confirmation...
               </p>
             </div>
           </div>

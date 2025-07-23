@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode } from 'react'
-import { useAccount, useNetwork, useBalance } from 'wagmi'
+import { useAccount, useChainId, useBalance } from 'wagmi'
 
 // Web3 context interface
 interface Web3ContextType {
@@ -22,10 +22,9 @@ interface Web3ProviderProps {
 // Web3 provider component
 export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
   const { address, isConnected, isConnecting } = useAccount()
-  const { chain } = useNetwork()
+  const chainId = useChainId()
   const { data: balance, isLoading: balanceLoading } = useBalance({
     address,
-    watch: true,
   })
 
   const isLoading = isConnecting || balanceLoading
@@ -34,7 +33,7 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
   const value: Web3ContextType = {
     isConnected,
     address,
-    chainId: chain?.id,
+    chainId,
     balance,
     isLoading,
     error,

@@ -138,8 +138,11 @@ type-check:
 # Environment setup
 setup-env:
 	@echo "Setting up environment..."
-	@if [ ! -f .env ]; then cp .env.example .env; fi
-	@echo "📝 Please configure your .env file"
+	@if [ ! -f .env ]; then cp env.example .env; fi
+	@if [ ! -f frontend/.env ]; then cp frontend/.env.example frontend/.env; fi
+	@echo "📝 Please configure your environment files:"
+	@echo "   - .env (root) for deployment settings"
+	@echo "   - frontend/.env for frontend settings"
 	@echo "✅ Environment setup completed"
 
 # Security checks

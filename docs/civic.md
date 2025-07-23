@@ -7,7 +7,7 @@ This guide covers integrating Civic authentication into the Web3 Starter Kit.
 Civic provides Web3 authentication with multiple login options:
 - **SSO Integration** - Google, Apple, X, Facebook, Discord, GitHub
 - **Email Authentication** - Traditional email/password
-- **Wallet Integration** - Embedded wallet capabilities
+- **Embedded Wallet** - Users can create and manage wallets directly in your app
 - **Multi-chain Support** - Works across major blockchains
 
 ## Setup
@@ -20,11 +20,15 @@ Civic provides Web3 authentication with multiple login options:
    - **App Name**: Web3 Starter Kit
    - **Redirect URI**: `http://localhost:3000/auth/callback`
    - **Supported Chains**: Ethereum, Polygon, Arbitrum
-4. Copy your Client ID
+4. **Enable Embedded Wallet**: 
+   - Go to Settings → Embedded Wallet
+   - Enable the embedded wallet feature for your users
+   - This allows users to create and manage wallets directly in your app
+5. Copy your Client ID
 
 ### 2. Environment Configuration
 
-Add your Civic credentials to `.env`:
+Add your Civic credentials to `frontend/.env`:
 
 ```env
 VITE_CIVIC_CLIENT_ID=your_civic_client_id_here
@@ -36,6 +40,21 @@ VITE_CIVIC_REDIRECT_URI=http://localhost:3000/auth/callback
 ```bash
 npm install @civic/auth-web3
 ```
+
+## Embedded Wallet Feature
+
+The embedded wallet allows users to create and manage wallets directly within your application without needing external wallet extensions.
+
+### Benefits
+- **No External Dependencies**: Users don't need MetaMask or other wallet extensions
+- **Seamless Experience**: Wallet creation and management happens within your app
+- **Cross-platform**: Works on mobile and desktop browsers
+- **Secure**: Wallets are created and managed securely by Civic
+
+### Setup Requirements
+1. Enable embedded wallet in your Civic dashboard (Settings → Embedded Wallet)
+2. Configure supported chains in your Civic application settings
+3. Ensure your app has proper SSL/HTTPS configuration for production
 
 ## Integration
 

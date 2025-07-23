@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Wallet, Shield, Zap, Users, BookOpen, Code } from 'lucide-react'
+import { Wallet, Shield, Zap, Users, BookOpen, Code, Edit3 } from 'lucide-react'
 import { useUser } from '../components/civic/CivicProvider'
 import { useWeb3 } from '../components/web3/Web3Provider'
 
@@ -73,6 +73,28 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Customization Notice */}
+      <section className="card bg-blue-50 border-blue-200">
+        <div className="flex items-start space-x-4">
+          <div className="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
+            <Edit3 className="h-6 w-6 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-blue-900 mb-2">Ready to Build Your Own App?</h2>
+            <p className="text-blue-800 mb-4">
+              This is a starter template. You can delete all the content on this homepage and replace it with your own application!
+            </p>
+            <div className="space-y-2 text-sm text-blue-700">
+              <p>• Replace the hero section with your app's introduction</p>
+              <p>• Update the features to match your application</p>
+              <p>• Customize the styling and branding</p>
+              <p>• Add your own pages and components</p>
+              <p>• Work with Cursor AI to ask and build about Wagmi, Civic, and smart contracts</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Status Section */}
       <section className="card">
         <h2 className="text-2xl font-bold mb-6">Connection Status</h2>
@@ -134,7 +156,7 @@ export const HomePage: React.FC = () => {
             </div>
             <div>
               <h3 className="font-semibold">Configure Environment</h3>
-              <p className="text-gray-600">Copy <code className="bg-gray-100 px-2 py-1 rounded">env.example</code> to <code className="bg-gray-100 px-2 py-1 rounded">.env</code> and add your Civic client ID.</p>
+              <p className="text-gray-600">Copy <code className="bg-gray-100 px-2 py-1 rounded">frontend/.env.example</code> to <code className="bg-gray-100 px-2 py-1 rounded">frontend/.env</code> and add your Civic client ID.</p>
             </div>
           </div>
           <div className="flex items-start space-x-4">

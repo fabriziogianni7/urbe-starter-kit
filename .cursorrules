@@ -164,6 +164,39 @@ import { UserButton } from '@civic/auth-web3/react';
 />
 ```
 
+### Civic Web3 Wallet Integration
+```typescript
+// Creating a wallet for new users
+import { userHasWallet } from "@civic/auth-web3";
+import { useUser } from "@civic/auth-web3/react";
+
+const createWallet = async () => {
+  const userContext = await useUser();
+  if (userContext.user && !userHasWallet(userContext)) {
+    await userContext.createWallet();
+  }
+};
+
+// Using with Wagmi
+import { embeddedWallet } from "@civic/auth-web3/wagmi";
+import { useAutoConnect } from "@civic/auth-web3/wagmi";
+
+// Add to Wagmi config
+const wagmiConfig = createConfig({
+  chains: [mainnet, sepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
+  connectors: [
+    embeddedWallet(),
+  ],
+});
+
+// Auto-connect hook
+useAutoConnect(); // Creates wallet and connects automatically
+```
+
 ### Civic User Object Structure
 ```typescript
 interface CivicUser {
@@ -174,6 +207,19 @@ interface CivicUser {
   given_name?: string;
   family_name?: string;
   updated_at?: Date;
+}
+
+// Web3 User Context
+type ExistingWeb3UserContext = UserContext & {
+  ethereum: {
+    address: string;
+    wallet: WalletClient;
+  }
+}
+
+type NewWeb3UserContext = UserContext & {
+  createWallet: () => Promise<void>;
+  walletCreationInProgress: boolean;
 }
 ```
 
@@ -186,6 +232,20 @@ enum AuthStatus {
   ERROR = "error",
   SIGNING_OUT = "signing_out",
 }
+```
+
+### Civic Configuration Options
+```typescript
+<CivicAuthProvider
+  clientId="YOUR_CLIENT_ID"           // Required
+  onSignIn={(error?: Error) => {}}    // Optional callback
+  onSignOut={() => {}}                // Optional callback
+  redirectUrl="/authenticating"       // Optional redirect URL
+  iframeMode="embedded"               // Optional: "embedded" | "modal"
+  displayMode="iframe"                // Optional: "iframe" | "redirect" | "new_tab"
+  initialChain={mainnet}              // Optional: initial blockchain
+  chains={[mainnet, polygon]}         // Optional: supported chains
+/>
 ```
 
 ## File Structure Conventions
@@ -334,5 +394,29 @@ Always use environment variables for:
 - [Civic Documentation](https://docs.civic.com/)
 - [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
 - [Ethereum Development](https://ethereum.org/developers/)
+
+## Documentation References
+
+This project includes comprehensive documentation in the `docs/` folder:
+
+### 📚 Project Documentation
+- **`docs/civic.md`** - Complete Civic authentication integration guide with official documentation, Web3 wallet integration, and API references
+- **`docs/frontend.md`** - React/TypeScript development guide with Wagmi integration patterns and best practices
+- **`docs/smart-contracts.md`** - Foundry smart contract development guide with security patterns and testing
+- **`docs/deployment.md`** - Deployment procedures for local, testnet, and production environments
+- **`docs/troubleshooting.md`** - Common issues and solutions for the entire Web3 stack
+
+### 📖 Documentation Usage
+- **Quick Reference**: Use `.cursorrules` for common patterns and project structure
+- **Detailed Guides**: Refer to `docs/` files for comprehensive implementation details
+- **Official Sources**: `docs/civic.md` contains official Civic documentation
+- **Best Practices**: All docs include real-world examples and security considerations
+
+### 🔍 Finding Information
+- **Civic Integration**: See `docs/civic.md` for complete official Civic SDK documentation
+- **Frontend Development**: See `docs/frontend.md` for React/Wagmi patterns and TypeScript best practices
+- **Smart Contracts**: See `docs/smart-contracts.md` for Foundry development and security patterns
+- **Deployment**: See `docs/deployment.md` for multi-environment deployment procedures
+- **Troubleshooting**: See `docs/troubleshooting.md` for common issues and debug commands
 
 Remember: Always prioritize security, user experience, and code maintainability in Web3 development. 

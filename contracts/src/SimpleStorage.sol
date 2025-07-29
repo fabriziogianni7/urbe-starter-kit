@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title SimpleStorage
@@ -54,7 +54,7 @@ contract SimpleStorage is Ownable, ReentrancyGuard {
      * @dev Retrieve the stored value
      * @return The currently stored value
      */
-    function retrieve() external view returns (uint256) {
+    function retrieve() external returns (uint256) {
         emit ValueRetrieved(msg.sender, _storedValue, block.timestamp);
         return _storedValue;
     }

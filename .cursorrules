@@ -377,6 +377,7 @@ Always use environment variables for:
 - Document deployment procedures
 - Include troubleshooting guides
 - Document security considerations
+- if you create README files, always create them in /docs folder
 
 ## Code Review Checklist
 - [ ] TypeScript types are properly defined

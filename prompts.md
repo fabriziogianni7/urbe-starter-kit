@@ -11,15 +11,16 @@ Create a comprehensive ERC20 token contract using Foundry and OpenZeppelin. The 
 
 - Use Solidity 0.8.19+ with latest features
 - Inherit from OpenZeppelin's ERC20 implementation
-- Include proper access control with Ownable
-- Implement minting functionality with role-based access
+- Include proper access control with Ownable from openzeppelin
+- Implement minting functionality with role-based access using openzeppelin contracts
+- Accept config flags for mintable, burnable, pausable.
 - Use custom errors for gas optimization
 - Include comprehensive events for all state changes
 - Follow security best practices (reentrancy guards, safe math)
 - Include NatSpec documentation for all public functions
 - Support both owner minting and authorized minter minting
 - Include burn functionality for token destruction
-- Implement proper pause/unpause functionality for emergencies
+- Implement proper pause/unpause functionality for emergencies using Pausable from open zeppelin
 
 The contract should be placed in `contracts/src/` and follow the project's smart contract patterns from `.cursorrules` and `docs/smart-contracts.md`.
 
@@ -39,7 +40,6 @@ Create a TokenFactory contract that allows users to deploy their own ERC20 token
 - Use the factory pattern to deploy new ERC20 tokens
 - Track all deployed tokens by their creators
 - Include proper access control and security measures
-- Use CREATE2 for deterministic addresses
 - Include events for token creation
 - Implement proper error handling with custom errors
 - Follow the smart contract patterns from `.cursorrules`
